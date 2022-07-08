@@ -1,5 +1,7 @@
-from flask import Flask, jsonify, request
 import json
+
+from flask import Flask, jsonify, request
+
 app = Flask(__name__)
 
 developers = [
@@ -14,15 +16,16 @@ developers = [
 
 
 @app.route('/dev/<int:id>/', methods=['GET', 'PUT', 'DELETE'])
-def developer(id):
+def developers(id):
     if request.method == 'GET':
         try:
             response = developers[id]
         except IndexError:
             mensagem = 'Desenvolvedor de ID {} não existe'.format(id)
-            response = {'status':'erro', 'mensagem':mensagem}
+            response = {'status': 'erro', 'mensagem': mensagem}
         except Exception:
             mensagem = 'Erro desconhecido, procure o admin..'
+            response = {'status': 'erro', 'mensagem': mensagem}
             return jsonify(response)
     elif request.method == 'PUT':
         dados = json.loads(request.data)
@@ -30,9 +33,10 @@ def developer(id):
         return jsonify(dados)
     elif request.method == 'DELETE':
         developers.pop(id)
-        return jsonify({'status':'sucess', 'mensagem':'registro removido'})
+        return jsonify({'status': 'sucess', 'mensagem': 'registro removido'})
 
 
+# def lista_developers():
 
 if __name__ == '__main__':
     app.run(debug=True)
